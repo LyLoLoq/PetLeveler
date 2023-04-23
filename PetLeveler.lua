@@ -10,6 +10,8 @@ local Enum = _G.Enum
 local CastSpellByID = awful.unlock("CastSpellByID")
 --
 
+_G.awful = awful
+
 
 local ui, settings, cmd = awful.UI:New("pets", {
     show = false,
@@ -140,52 +142,52 @@ end
 
 
 local points = {
-    { x = -131.83180236816406, y = 1709.742919921875, z = 244.20372009277344 },
-    { x = -105.58808898925781, y = 1730.44970703125, z = 243.38377380371094 },
-    { x = -84.12421417236328, y = 1751.8062744140625, z = 242.63296508789063 },
-    { x = -61.09368896484375, y = 1789.068603515625, z = 249.875244140625 },
-    { x = -38.833614349365234, y = 1821.541259765625, z = 232.93324279785156 },
-    { x = -18.85279083251953, y = 1845.2017822265625, z = 210.05130004882813 },
-    { x = 14.687411308288574, y = 1849.7840576171875, z = 200.9446563720703 },
-    { x = 44.32094192504883,  y = 1869.5216064453125, z = 194.69338989257813 },
-    { x = 71.85079956054688,  y = 1891.697998046875, z = 187.00192260742188 },
-    { x = 103.81781005859375, y = 1901.179443359375, z = 182.77947998046875 },
-    { x = 144.64561462402344, y = 1916.552490234375, z = 179.31605529785156 },
-    { x = 174.89675903320313, y = 1908.00048828125,  z = 179.3667755126953 },
-    { x = 182.14007568359375, y = 1901.8721923828125, z = 180.49862670898438 },
-    { x = 204.79151916503906, y = 1874.003662109375, z = 190.1284942626953 },
-    { x = 215.92247009277344, y = 1844.039306640625, z = 204.65841674804688 },
-    { x = 209.7032012939453,  y = 1811.9986572265625, z = 226.9759521484375 },
-    { x = 191.923828125,      y = 1779.0247802734375, z = 252.53919982910156 },
-    { x = 169.21295166015625, y = 1739.51708984375,  z = 283.1856384277344 },
-    { x = 145.34228515625,    y = 1718.0765380859375, z = 296.0733337402344 },
-    { x = 113.3151626586914,  y = 1693.1688232421875, z = 295.9013671875 },
-    { x = 98.02359008789063,  y = 1666.2523193359375, z = 309.29937744140625 },
-    { x = 69.28254699707031,  y = 1644.1048583984375, z = 307.0331115722656 },
-    { x = 41.571319580078125, y = 1655.591064453125, z = 282.9177551269531 },
-    { x = 20.771446228027344, y = 1652.60888671875,  z = 259.2049865722656 },
-    { x = -9.63976001739502,  y = 1640.9931640625,   z = 249.6459503173828 },
-    { x = -44.9519157409668,  y = 1633.427490234375, z = 244.21897888183594 },
-    { x = -79.47981262207031, y = 1622.1195068359375, z = 240.6708984375 },
-    { x = -112.89861297607422, y = 1627.370849609375, z = 240.15138244628906 },
-    { x = -135.98072814941406, y = 1652.295166015625, z = 241.37893676757813 },
-    { x = -145.1597442626953, y = 1684.672119140625, z = 245.57489013671875 },
-    { x = -179.07127380371094, y = 1681.230712890625, z = 247.3962860107422 },
-    { x = -209.78404235839844, y = 1665.573486328125, z = 241.38134765625 },
-    { x = -254.4716796875,    y = 1661.2730712890625, z = 228.6956024169922 },
-    { x = -284.6179504394531, y = 1668.5107421875,   z = 216.39256286621094 },
-    { x = -313.7078857421875, y = 1683.2705078125,   z = 201.94937133789063 },
-    { x = -336.6141052246094, y = 1708.903076171875, z = 189.90333557128906 },
-    { x = -345.056884765625,  y = 1736.9754638671875, z = 180.0364227294922 },
+    { x = -131.83180236816406, y = 1709.742919921875,  z = 244.20372009277344 },
+    { x = -105.58808898925781, y = 1730.44970703125,   z = 243.38377380371094 },
+    { x = -84.12421417236328,  y = 1751.8062744140625, z = 242.63296508789063 },
+    { x = -61.09368896484375,  y = 1789.068603515625,  z = 249.875244140625 },
+    { x = -38.833614349365234, y = 1821.541259765625,  z = 232.93324279785156 },
+    { x = -18.85279083251953,  y = 1845.2017822265625, z = 210.05130004882813 },
+    { x = 14.687411308288574,  y = 1849.7840576171875, z = 200.9446563720703 },
+    { x = 44.32094192504883,   y = 1869.5216064453125, z = 194.69338989257813 },
+    { x = 71.85079956054688,   y = 1891.697998046875,  z = 187.00192260742188 },
+    { x = 103.81781005859375,  y = 1901.179443359375,  z = 182.77947998046875 },
+    { x = 144.64561462402344,  y = 1916.552490234375,  z = 179.31605529785156 },
+    { x = 174.89675903320313,  y = 1908.00048828125,   z = 179.3667755126953 },
+    { x = 182.14007568359375,  y = 1901.8721923828125, z = 180.49862670898438 },
+    { x = 204.79151916503906,  y = 1874.003662109375,  z = 190.1284942626953 },
+    { x = 215.92247009277344,  y = 1844.039306640625,  z = 204.65841674804688 },
+    { x = 209.7032012939453,   y = 1811.9986572265625, z = 226.9759521484375 },
+    { x = 191.923828125,       y = 1779.0247802734375, z = 252.53919982910156 },
+    { x = 169.21295166015625,  y = 1739.51708984375,   z = 283.1856384277344 },
+    { x = 145.34228515625,     y = 1718.0765380859375, z = 296.0733337402344 },
+    { x = 113.3151626586914,   y = 1693.1688232421875, z = 295.9013671875 },
+    { x = 98.02359008789063,   y = 1666.2523193359375, z = 309.29937744140625 },
+    { x = 69.28254699707031,   y = 1644.1048583984375, z = 307.0331115722656 },
+    { x = 41.571319580078125,  y = 1655.591064453125,  z = 282.9177551269531 },
+    { x = 20.771446228027344,  y = 1652.60888671875,   z = 259.2049865722656 },
+    { x = -9.63976001739502,   y = 1640.9931640625,    z = 249.6459503173828 },
+    { x = -44.9519157409668,   y = 1633.427490234375,  z = 244.21897888183594 },
+    { x = -79.47981262207031,  y = 1622.1195068359375, z = 240.6708984375 },
+    { x = -112.89861297607422, y = 1627.370849609375,  z = 240.15138244628906 },
+    { x = -135.98072814941406, y = 1652.295166015625,  z = 241.37893676757813 },
+    { x = -145.1597442626953,  y = 1684.672119140625,  z = 245.57489013671875 },
+    { x = -179.07127380371094, y = 1681.230712890625,  z = 247.3962860107422 },
+    { x = -209.78404235839844, y = 1665.573486328125,  z = 241.38134765625 },
+    { x = -254.4716796875,     y = 1661.2730712890625, z = 228.6956024169922 },
+    { x = -284.6179504394531,  y = 1668.5107421875,    z = 216.39256286621094 },
+    { x = -313.7078857421875,  y = 1683.2705078125,    z = 201.94937133789063 },
+    { x = -336.6141052246094,  y = 1708.903076171875,  z = 189.90333557128906 },
+    { x = -345.056884765625,   y = 1736.9754638671875, z = 180.0364227294922 },
     { x = -333.71685791015625, y = 1770.6763916015625, z = 171.20401000976563 },
     { x = -302.83441162109375, y = 1795.5184326171875, z = 167.4652099609375 },
-    { x = -267.3081970214844, y = 1805.0294189453125, z = 171.35923767089844 },
+    { x = -267.3081970214844,  y = 1805.0294189453125, z = 171.35923767089844 },
     { x = -240.84024047851563, y = 1790.2418212890625, z = 185.58900451660156 },
-    { x = -216.577880859375,  y = 1770.0179443359375, z = 204.9113006591797 },
+    { x = -216.577880859375,   y = 1770.0179443359375, z = 204.9113006591797 },
     { x = -189.99209594726563, y = 1758.7496337890625, z = 219.65126037597656 },
-    { x = -159.24037170410156, y = 1759.740234375,   z = 233.7253875732422 },
-    { x = -132.66796875,      y = 1746.8443603515625, z = 244.9572296142578 },
-    { x = -126.61276245117188, y = 1720.268798828125, z = 246.43975830078125 }
+    { x = -159.24037170410156, y = 1759.740234375,     z = 233.7253875732422 },
+    { x = -132.66796875,       y = 1746.8443603515625, z = 244.9572296142578 },
+    { x = -126.61276245117188, y = 1720.268798828125,  z = 246.43975830078125 }
 }
 
 awful.immerseOL(points)
@@ -223,11 +225,12 @@ awful.onTick(function()
     if not pets.settings.enabled then
         return
     end
-    
+
     NavigateRoute()
 end)
 
 
+local timeInteract, delayTimeInteract = 0, awful.delay(1, 3)
 local function NavigateToNextBattle()
     if GetPetHealthByIndex(2) == 0 and GetPetHealthByIndex(3) == 0 then
         awful.alert("Team is dead, wait heal spell")
@@ -235,50 +238,56 @@ local function NavigateToNextBattle()
     end
 
     local dist = awful.distance(nextPetBattle)
-    if nextPetBattle == nil then
-        local pets = awful.critters.filter(function(unit)
-            return not unit.dead and awful.call('UnitIsBattlePet', unit.unit) and
-                not awful.call('UnitIsBattlePetCompanion', unit.unit)
+    -- if nextPetBattle == nil then
+    local critters = awful.critters.filter(function(critter)
+        local count, total, units = awful.units.around(critter, 25, function(unit)
+            return (not unit.friend) and (not unit.dead) and (unit.reaction == 2)
         end)
-        if #pets == 0 then
-            awful.alert("No battle pets found")
-        else
-            pets.sort(function(a, b)
-                return a and b and a.distance < b.distance
-            end)
-            nextPetBattle = pets[1]
-            awful.alert("Found next battle")
-        end
+        return count == 0 and not critter.dead and awful.call('UnitIsBattlePet', critter.unit) and
+            not awful.call('UnitIsBattlePetCompanion', critter.unit)
+    end)
+    if #critters == 0 then
+        awful.alert("No battle pets found")
+    else
+        critters.sort(function(a, b)
+            return a and b and a.distance < b.distance
+        end)
+        nextPetBattle = critters[1]
+        awful.alert("Found next battle")
+    end
+
+    if nextPetBattle and nextPetBattle.dead then
+        nextPetBattle = nil
     elseif dist <= 10 then
+        awful.StopMoving()
+        local x, y, z = nextPetBattle.position()
+        MoveTo(x, y, z)
+        Dismount()
+        if awful.time < timeInteract then
+            return
+        end
+        timeInteract = awful.time + delayTimeInteract.now
+        nextPetBattle:interact()
+    elseif dist <= 25 then
         local px, py, pz = player.position()
         pz = awful.GroundZ(px, py, pz)
         -- MoveTo(px, py, pz)
         local path = awful.path(player, nextPetBattle)
-        path = path.simplify(1, 1)
         path.draw()
         path.follow()
-        Dismount()
-        nextPetBattle:interact()
-    elseif player.mounted then
-        -- if not player.flying then
-        --     JumpOrAscendStart()
-        --     awful.alert("Flying")
-        --     C_Timer.After(0.5, function()
-        --         awful.StopMoving()
-        --     end)
-        -- else
+    elseif nextPetBattle and player.mounted then
         local x, y, z = nextPetBattle.position()
         if type(x) == "number" then
             -- MoveTo(x, y, z)
             local path = awful.path(player, nextPetBattle)
-            path = path.simplify(1, 1)
+            -- path = path.simplify(1, 1)
             path.draw()
             path.follow()
         end
 
         return
         -- end
-    else
+    elseif not player.mounted then
         C_MountJournal.SummonByID(0)
     end
 end
@@ -326,10 +335,10 @@ awful.addUpdateCallback(function()
     local gx, gy, gz = awful.GroundZ(px, py, pz)
     local distanceToGround = awful.distance(px, py, pz, gx, gy, gz)
     local distanceToBattle = awful.distance(nextPetBattle)
-    if distanceToGround >= 10 then
+    if distanceToGround >= 20 then
         -- awful.alert("Too high")
         AscendStop()
-    elseif player.mounted and distanceToGround < 8 and distanceToBattle > 10 then
+    elseif player.mounted and distanceToGround < 15 and distanceToBattle > 10 then
         JumpOrAscendStart()
     end
     if not C_PetBattles.IsInBattle() then
@@ -400,10 +409,12 @@ awful.addUpdateCallback(function()
             end
         elseif battleState == statesEnum.LE_PET_BATTLE_STATE_WAITING_FOR_ROUND_PLAYBACK then
             if settings.roundNumber <= 1 and GetPetHealthByIndex(1) == 0 then
+                awful.alert("Pet is dead at round 1, forfeit")
                 awful.call("C_PetBattles.ForfeitGame")
             end
 
             if GetPetHealthByIndex(3) == 0 and GetPetHealthByIndex(2) == 0 then
+                awful.alert("Team is dead, forfeit")
                 awful.call("C_PetBattles.ForfeitGame")
             end
             if GetPetHealthByIndex(2) == 0 then
@@ -429,6 +440,8 @@ end
 local f = CreateFrame("Frame")
 f:RegisterEvent("UI_ERROR_MESSAGE")
 f:SetScript("OnEvent", OnEvent)
+
+awful.print("PetLeveler loaded")
 
 
 -- cmd:New(function(msg)
