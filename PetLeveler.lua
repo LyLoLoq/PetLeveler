@@ -137,8 +137,96 @@ local function IsAllActionsDisabled()
     end
 end
 
+
+
+local points = {
+    { x = -131.83180236816406, y = 1709.742919921875, z = 244.20372009277344 },
+    { x = -105.58808898925781, y = 1730.44970703125, z = 243.38377380371094 },
+    { x = -84.12421417236328, y = 1751.8062744140625, z = 242.63296508789063 },
+    { x = -61.09368896484375, y = 1789.068603515625, z = 249.875244140625 },
+    { x = -38.833614349365234, y = 1821.541259765625, z = 232.93324279785156 },
+    { x = -18.85279083251953, y = 1845.2017822265625, z = 210.05130004882813 },
+    { x = 14.687411308288574, y = 1849.7840576171875, z = 200.9446563720703 },
+    { x = 44.32094192504883,  y = 1869.5216064453125, z = 194.69338989257813 },
+    { x = 71.85079956054688,  y = 1891.697998046875, z = 187.00192260742188 },
+    { x = 103.81781005859375, y = 1901.179443359375, z = 182.77947998046875 },
+    { x = 144.64561462402344, y = 1916.552490234375, z = 179.31605529785156 },
+    { x = 174.89675903320313, y = 1908.00048828125,  z = 179.3667755126953 },
+    { x = 182.14007568359375, y = 1901.8721923828125, z = 180.49862670898438 },
+    { x = 204.79151916503906, y = 1874.003662109375, z = 190.1284942626953 },
+    { x = 215.92247009277344, y = 1844.039306640625, z = 204.65841674804688 },
+    { x = 209.7032012939453,  y = 1811.9986572265625, z = 226.9759521484375 },
+    { x = 191.923828125,      y = 1779.0247802734375, z = 252.53919982910156 },
+    { x = 169.21295166015625, y = 1739.51708984375,  z = 283.1856384277344 },
+    { x = 145.34228515625,    y = 1718.0765380859375, z = 296.0733337402344 },
+    { x = 113.3151626586914,  y = 1693.1688232421875, z = 295.9013671875 },
+    { x = 98.02359008789063,  y = 1666.2523193359375, z = 309.29937744140625 },
+    { x = 69.28254699707031,  y = 1644.1048583984375, z = 307.0331115722656 },
+    { x = 41.571319580078125, y = 1655.591064453125, z = 282.9177551269531 },
+    { x = 20.771446228027344, y = 1652.60888671875,  z = 259.2049865722656 },
+    { x = -9.63976001739502,  y = 1640.9931640625,   z = 249.6459503173828 },
+    { x = -44.9519157409668,  y = 1633.427490234375, z = 244.21897888183594 },
+    { x = -79.47981262207031, y = 1622.1195068359375, z = 240.6708984375 },
+    { x = -112.89861297607422, y = 1627.370849609375, z = 240.15138244628906 },
+    { x = -135.98072814941406, y = 1652.295166015625, z = 241.37893676757813 },
+    { x = -145.1597442626953, y = 1684.672119140625, z = 245.57489013671875 },
+    { x = -179.07127380371094, y = 1681.230712890625, z = 247.3962860107422 },
+    { x = -209.78404235839844, y = 1665.573486328125, z = 241.38134765625 },
+    { x = -254.4716796875,    y = 1661.2730712890625, z = 228.6956024169922 },
+    { x = -284.6179504394531, y = 1668.5107421875,   z = 216.39256286621094 },
+    { x = -313.7078857421875, y = 1683.2705078125,   z = 201.94937133789063 },
+    { x = -336.6141052246094, y = 1708.903076171875, z = 189.90333557128906 },
+    { x = -345.056884765625,  y = 1736.9754638671875, z = 180.0364227294922 },
+    { x = -333.71685791015625, y = 1770.6763916015625, z = 171.20401000976563 },
+    { x = -302.83441162109375, y = 1795.5184326171875, z = 167.4652099609375 },
+    { x = -267.3081970214844, y = 1805.0294189453125, z = 171.35923767089844 },
+    { x = -240.84024047851563, y = 1790.2418212890625, z = 185.58900451660156 },
+    { x = -216.577880859375,  y = 1770.0179443359375, z = 204.9113006591797 },
+    { x = -189.99209594726563, y = 1758.7496337890625, z = 219.65126037597656 },
+    { x = -159.24037170410156, y = 1759.740234375,   z = 233.7253875732422 },
+    { x = -132.66796875,      y = 1746.8443603515625, z = 244.9572296142578 },
+    { x = -126.61276245117188, y = 1720.268798828125, z = 246.43975830078125 }
+}
+
+awful.immerseOL(points)
+
 local function NavigateRoute()
+    if nextPetBattle ~= nil then return end
+    if not player.mounted then
+        awful.alert("Summon mount, no battle available")
+        C_MountJournal.SummonByID(0)
+        return
+    end
+    if player.moving then
+        return false
+    end
+    points.draw()
+    for index, value in ipairs(points) do
+        if value.passed ~= true then
+            local x, y, z = value.x, value.y, value.z
+            if awful.player.distanceTo(x, y, z) > 0.1 then
+                MoveTo(x, y, z)
+            end
+
+            value.passed = true
+            break
+        end
+        if index == #points then
+            for index, value in ipairs(points) do
+                value.passed = false
+            end
+        end
+    end
 end
+
+awful.onTick(function()
+    if not pets.settings.enabled then
+        return
+    end
+    
+    NavigateRoute()
+end)
+
 
 local function NavigateToNextBattle()
     if GetPetHealthByIndex(2) == 0 and GetPetHealthByIndex(3) == 0 then
@@ -164,7 +252,11 @@ local function NavigateToNextBattle()
     elseif dist <= 10 then
         local px, py, pz = player.position()
         pz = awful.GroundZ(px, py, pz)
-        MoveTo(px, py, pz)
+        -- MoveTo(px, py, pz)
+        local path = awful.path(player, nextPetBattle)
+        path = path.simplify(1, 1)
+        path.draw()
+        path.follow()
         Dismount()
         nextPetBattle:interact()
     elseif player.mounted then
@@ -175,12 +267,16 @@ local function NavigateToNextBattle()
         --         awful.StopMoving()
         --     end)
         -- else
-            local x, y, z = nextPetBattle.position()
-            if type(x) == "number" then
-                MoveTo(x, y, z)
-            end
+        local x, y, z = nextPetBattle.position()
+        if type(x) == "number" then
+            -- MoveTo(x, y, z)
+            local path = awful.path(player, nextPetBattle)
+            path = path.simplify(1, 1)
+            path.draw()
+            path.follow()
+        end
 
-            return
+        return
         -- end
     else
         C_MountJournal.SummonByID(0)
@@ -221,7 +317,6 @@ awful.addUpdateCallback(function()
         if awful.AntiAFK.enabled then
             awful.AntiAFK:Disable()
         end
-        
         return
     end
     if not awful.AntiAFK.enabled then
@@ -237,10 +332,6 @@ awful.addUpdateCallback(function()
     elseif player.mounted and distanceToGround < 8 and distanceToBattle > 10 then
         JumpOrAscendStart()
     end
-    if awful.time < time then
-        return
-    end
-    time = awful.time + delayTime.now
     if not C_PetBattles.IsInBattle() then
         UseHeal()
 
@@ -256,6 +347,10 @@ awful.addUpdateCallback(function()
         settings.roundNumber = 0
         NavigateToNextBattle()
     else
+        if awful.time < time then
+            return
+        end
+        time = awful.time + delayTime.now
         local battleState = C_PetBattles.GetBattleState()
         settings.battleState = states[battleState]
         if battleState == statesEnum.LE_PET_BATTLE_STATE_ROUND_IN_PROGRESS then
@@ -304,6 +399,10 @@ awful.addUpdateCallback(function()
                 end
             end
         elseif battleState == statesEnum.LE_PET_BATTLE_STATE_WAITING_FOR_ROUND_PLAYBACK then
+            if settings.roundNumber <= 1 and GetPetHealthByIndex(1) == 0 then
+                awful.call("C_PetBattles.ForfeitGame")
+            end
+
             if GetPetHealthByIndex(3) == 0 and GetPetHealthByIndex(2) == 0 then
                 awful.call("C_PetBattles.ForfeitGame")
             end
@@ -318,8 +417,12 @@ awful.addUpdateCallback(function()
 end)
 
 local function OnEvent(self, event, errorType, message)
-    if message == ERR_OUT_OF_RANGE then
-        print(message)
+    if message == ERR_PETBATTLE_NOT_HERE_OBSTRUCTED then
+        -- NavigateToNextBattle()
+        -- awful.call("StartAttack")
+        local x, y, z = nextPetBattle.position()
+        MoveTo(x, y, z)
+        nextPetBattle:interact()
     end
 end
 
@@ -328,135 +431,14 @@ f:RegisterEvent("UI_ERROR_MESSAGE")
 f:SetScript("OnEvent", OnEvent)
 
 
--- if not IsMounted() then
---     C_MountJournal.SummonByID(0)
--- end
--- if not awful.player.moving then
---     local px, py, pz = awful.player.position()
---     if not IsFlying() then
---         local path = awful.path(awful.player, px, py, pz + 10)
---         path = path.simplify(1, 1)
---         path.follow()
---         return
---     end
-
-
---     if nextPetBattle == nil then
---         nextPetBattle = awful.critters.find(function(unit)
---             return awful.call('UnitIsBattlePet', unit.unit) and not awful.call('UnitIsBattlePetCompanion', unit.unit)
---         end)
---     end
---     if nextPetBattle and not nextPetBattle.exists then
---         print('not exists', nextPetBattle.exists)
---         nextPetBattle = nil
---     end
---     if IsFlying() and nextPetBattle then
---         local tx, ty, tz = nextPetBattle.position()
---         print(awful.distance(px,py,pz, tx, ty, tz))
---         if awful.distance(px,py,pz, tx, ty, tz)<= 4.5 then
---             awful.protected.RunMacroText("/dismount")
---         else
---             local path = awful.path(awful.player, nextPetBattle)
---             path = path.simplify()
---             path.follow()
---             return
---         end
---     end
--- end
-
--- -------------------
-
--- Bite: 110
--- Leap: 364
--- Devour: 538
--- Bloodfang: 917
-
-
-
-
--- FLIGHT
-
--- local points = {}
--- awful.Draw(function(draw)
---     draw:SetColor(255, 198, 74, 90)
---     for index, point in ipairs(points) do
---         draw:Circle(point.x, point.y, point.z, 5)
---         if points[index + 1] ~= nil then
---             draw:Line(point.x, point.y, point.z, points[index + 1].x, points[index + 1].y, points[index + 1].z, 20)
---         end
---     end
--- end)
-
-
-
--- local lastIndex = -1
-
--- -- Function to move character to a point and wait for arrival
--- local function moveToAndWait(point, index)
---     local x, y, z = point.x,point.y,point.z
---     MoveTo(x, y, z)
-
---     while true do
---         local px, py, pz = awful.player.position()
---         local distance = sqrt((x - px)^2 + (y - py)^2 + (z - pz)^2)
---         if distance < 2.0 then -- 2 yards tolerance for arrival
---             if index == #points then
---                 print('resseting')
---                 lastIndex = -1
---             end
---             break
---         end
---         coroutine.yield()
---     end
--- end
-
--- -- Move character to each point in the set
--- local co = coroutine.create(function ()
---     for index, point in ipairs(points) do
---         moveToAndWait(point, index)
---         coroutine.yield() -- wait for a short delay between each move
---     end
--- end)
-
--- local delay = 0 -- delay in seconds between each move
--- local timer = 0
-
--- -- Update function to resume coroutine after delay
--- local function onUpdate(self, elapsed)
---     if lastIndex < 0 then
---         return
---     end
---     timer = timer + elapsed
---     if timer > delay then
---         timer = timer - delay
---         coroutine.resume(co)
---     end
--- end
-
--- -- Register update function to run every frame
--- local frame = CreateFrame("Frame")
--- frame:SetScript("OnUpdate", onUpdate)
-
 -- cmd:New(function(msg)
 --     if string.lower(msg) == "add" then
 --         local x, y, z = awful.player.position()
 --         table.insert(points, { x = x, y = y, z = z })
+--         Unlocker.Util.File:Write("scripts/awful/routines/PetLeveler/paths.json", Unlocker.Util.JSON:Encode(points), false)
 --     elseif string.lower(msg) == "follow" then
---         print('starting')
---         lastIndex = 0
---         -- frame:SetScript("OnUpdate", nil)
+--         off = false
+--     elseif string.lower(msg) == "stop" then
+--         off = true
 --     end
 -- end)
-
-
-
-
-local function writeEnumToFile()
-    Tinkr.Util.File:Write("scripts/awful/routines/Teste/types/wow/Enum.lua", "---@meta\n---@class Enum", false)
-    for key, value in pairs(Enum) do
-        for key2, value2 in pairs(value) do
-            Tinkr.Util.File:Write("scripts/awful/routines/Teste/types/wow/Enum.lua",
-                "\n---@field " .. key .. "." .. key2 .. " unknown", true)
-        end
-    end
-end
