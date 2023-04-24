@@ -10,9 +10,6 @@ local Enum = _G.Enum
 local CastSpellByID = awful.unlock("CastSpellByID")
 --
 
-_G.awful = awful
-
-
 local ui, settings, cmd = awful.UI:New("pets", {
     show = false,
     title = { "Pet Leveler" },
@@ -30,6 +27,13 @@ local ui, settings, cmd = awful.UI:New("pets", {
 })
 
 pets.settings = settings
+
+local General = ui:Tab("Pets")
+
+General:Text({ text = "How to use" })
+General:Text({ text = "Have at least 2 Zandalari pets with level 25" })
+General:Text({ text = "Go to Pandaria" })
+General:Text({ text = "Go to 26, 44 (/way 26, 44)" })
 
 local statusFrame = ui:StatusFrame({
     colors = {
@@ -103,23 +107,62 @@ local function GetPetMaxHealthByIndex(index)
     return maxHealth
 end
 
+local function IsZandalariPetFromPetJournal(index)
+    local petID, _, _, _, level, _, _, name = C_PetJournal.GetPetInfoByIndex(index)
+    if string.find(name, "Zandalari") then
+        return true
+    end
+    return false
+end
+
+local function IsZandalariPetFromPetTeam(index)
+    local petID = C_PetJournal.GetPetLoadOutInfo(index);
+    local name = select(8, C_PetJournal.GetPetInfoByPetID(petID))
+    if string.find(name, "Zandalari") then
+        return true
+    end
+    return false
+end
+
+local function IsCurrentPetDeadOrLevelMAX()
+    local petGUID = C_PetJournal.GetPetLoadOutInfo(1)
+    local _, _, level = C_PetJournal.GetPetInfoByPetID(petGUID)
+    if level == 25 then
+        awful.alert("Changing team, level 25")
+        return true
+    end
+    if GetPetHealthByIndex(1) == 0 then
+        awful.alert("Changing team, cant battle")
+        return true
+    end
+end
+
+-- local timeTeam, delayTimeTeam = 0, awful.delay(1, 2)
 local function SetBattleTeam()
-    C_PetJournal.SetPetLoadOutInfo(2, 'BattlePet-0-0000213CAFCB')
-    C_PetJournal.SetPetLoadOutInfo(3, 'BattlePet-0-0000213CAFCA')
     local _, ownedPets = C_PetJournal.GetNumPets()
     for index = 1, ownedPets do
-        local petID, _, _, _, level = C_PetJournal.GetPetInfoByIndex(index)
+        local petID, _, _, _, level, _, _, name = C_PetJournal.GetPetInfoByIndex(index)
         local health = C_PetJournal.GetPetStats(petID);
         local canBattle = health > 0
 
-        if canBattle and level < 25 then
-            awful.alert('Setting new team')
-            C_PetJournal.SetPetLoadOutInfo(1, petID)
-            return
-        end
-        if index == ownedPets then
-            awful.alert('No pets that can battle and are under level 25 found')
-            return
+        if IsZandalariPetFromPetJournal(index) then
+            if not IsZandalariPetFromPetTeam(2) and level == 25 then
+                awful.alert('Setting new team Zandalari 2')
+                C_PetJournal.SetPetLoadOutInfo(2, petID)
+            elseif not IsZandalariPetFromPetTeam(3) and level == 25 then
+                awful.alert('Setting new team Zandalari 3')
+                C_PetJournal.SetPetLoadOutInfo(3, petID)
+            end
+        elseif IsCurrentPetDeadOrLevelMAX() then
+            if canBattle and level < 25 then
+                awful.alert('Setting new team')
+                C_PetJournal.SetPetLoadOutInfo(1, petID)
+                return
+            end
+            if index == ownedPets then
+                awful.alert('No pets that can battle and are under level 25 found')
+                return
+            end
         end
     end
 end
@@ -293,19 +336,6 @@ local function NavigateToNextBattle()
     end
 end
 
-local function IsCurrentPetDeadOrLevelMAX()
-    local petGUID = C_PetJournal.GetPetLoadOutInfo(1)
-    local _, _, level = C_PetJournal.GetPetInfoByPetID(petGUID)
-    if level == 25 then
-        awful.alert("Changing team, level 25")
-        return true
-    end
-    if GetPetHealthByIndex(1) == 0 then
-        awful.alert("Changing team, cant battle")
-        return true
-    end
-end
-
 local function UseHeal()
     local maxHealth1 = GetPetMaxHealthByIndex(1)
     local maxHealth2 = GetPetMaxHealthByIndex(2)
@@ -349,10 +379,10 @@ awful.addUpdateCallback(function()
     if not C_PetBattles.IsInBattle() then
         UseHeal()
 
-        if IsCurrentPetDeadOrLevelMAX() then
-            SetBattleTeam()
-            return
-        end
+        -- if IsCurrentPetDeadOrLevelMAX() then
+        SetBattleTeam()
+        --     return
+        -- end
 
         if settings.roundNumber > 0 then
             nextPetBattle = nil
@@ -446,7 +476,12 @@ local f = CreateFrame("Frame")
 f:RegisterEvent("UI_ERROR_MESSAGE")
 f:SetScript("OnEvent", OnEvent)
 
-awful.print("PetLeveler loaded")
+
+C_Timer.After(3, function()
+    awful.print("PetLeveler loaded")
+    awful.print("/pets to open menu")
+end)
+
 
 
 -- cmd:New(function(msg)
