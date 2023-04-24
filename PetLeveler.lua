@@ -36,6 +36,8 @@ General:Text({ text = "How to use" })
 General:Text({ text = "Have at least 2 Zandalari pets with level 25" })
 General:Text({ text = "Go to Pandaria" })
 General:Text({ text = "Go to 26, 44 (/way 26, 44)" })
+General:Text({ text = "Make sure to have a favorite pet as a flying mount" })
+General:Text({ text = "PS: Works with non flying mount too" })
 -- General:Checkbox({
 --     text = "",
 --     var = "general_draw_player_circle",
