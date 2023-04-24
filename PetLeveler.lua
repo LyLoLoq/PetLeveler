@@ -570,9 +570,9 @@ C_Timer.After(3, function()
     awful.print("PetLeveler loaded")
     awful.print("/pets to open menu")
     if ExpertRiding.known then
-        awful.print("We can fly")
+        awful.print("We can fly!")
     else
-        awful.print("We can't fly")
+        awful.print("We can't fly!")
     end
 end)
 
