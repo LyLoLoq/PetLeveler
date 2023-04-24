@@ -237,7 +237,10 @@ local points = { { x = -9.064600944519043, y = 1775.9498291015625, z = 241.83862
     { x = -97.78848266601563,  y = 1614.0284423828125, z = 235.51133728027344 },
     { x = -110.78910064697266, y = 1621.232421875,     z = 235.51133728027344 },
     { x = -122.18473815917969, y = 1632.6727294921875, z = 236.15232849121094 },
-    { x = -133.36117553710938, y = 1646.2099609375,    z = 235.63084411621094 }
+    { x = -133.36117553710938, y = 1646.2099609375,    z = 235.63084411621094 },
+    { x= -79.77179718017578, y= 1694.59765625, z= 235.51535034179688 },
+    { x= -53.63924789428711, y= 1721.18310546875, z= 235.424072265625 },
+    { x= -30.32332992553711, y= 1700.79833984375, z= 236.16441345214844 }
 }
 
 if ExpertRiding.known then
@@ -294,6 +297,9 @@ end
 
 awful.immerseOL(points)
 
+
+local lastPoint = points[1]
+
 local function NavigateRoute()
     if nextPetBattle ~= nil then return end
     if not player.mounted then
@@ -313,6 +319,7 @@ local function NavigateRoute()
             end
 
             value.passed = true
+            lastPoint = value
             break
         end
         if index == #points then
@@ -338,6 +345,17 @@ awful.onTick(function()
     NavigateRoute()
 end)
 
+local function distanceToClosestPoint(critter)
+    local result = false
+    for index, value in ipairs(points) do
+        if critter.distanceTo(value.x, value.y, value.z) <= 50 then
+            result = true
+            break
+        end
+    end
+    return result
+end
+
 
 local timeInteract, delayTimeInteract = 0, awful.delay(1, 3)
 local function NavigateToNextBattle()
@@ -351,14 +369,13 @@ local function NavigateToNextBattle()
         local count, _, _ = awful.units.around(critter, 25, function(unit)
             return (not unit.friend) and (not unit.dead) and (unit.reaction == 2)
         end)
-        -- if ExpertRiding.known then
+        if ExpertRiding.known then
             return count == 0 and not critter.dead and awful.call('UnitIsBattlePet', critter.unit) and
                 not awful.call('UnitIsBattlePetCompanion', critter.unit)
-        -- else
-        --     return count == 0 and not critter.dead and awful.call('UnitIsBattlePet', critter.unit) and
-        --         not awful.call('UnitIsBattlePetCompanion', critter.unit) and
-        --         critter.distanceTo(safePosition.x, safePosition.y, safePosition.z) <= 100
-        -- end
+        else
+            return count == 0 and not critter.dead and awful.call('UnitIsBattlePet', critter.unit) and
+                not awful.call('UnitIsBattlePetCompanion', critter.unit) and distanceToClosestPoint(critter)
+        end
     end)
     if #critters == 0 then
         awful.alert("No battle pets found")
@@ -558,6 +575,17 @@ C_Timer.After(3, function()
         awful.print("We can't fly")
     end
 end)
+
+-- awful.Draw(function(draw)
+--     if not ExpertRiding.known then
+--         points.draw()
+--         for index, value in ipairs(points) do
+--             -- draw:Line(x1, y1, z1, safePosition.x, safePosition.y, safePosition.z)
+--             draw:FilledCircle(value.x, value.y, value.z, 50)
+--         end
+--     end
+-- end)
+
 
 
 -- local newPoints = {}
