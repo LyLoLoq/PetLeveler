@@ -199,7 +199,7 @@ local function NavigateRoute()
         C_MountJournal.SummonByID(0)
         return
     end
-    if player.moving then
+    if player.moving or not player.mounted then
         return false
     end
     points.draw()
@@ -237,7 +237,6 @@ local function NavigateToNextBattle()
         return
     end
 
-    local dist = awful.distance(nextPetBattle)
     -- if nextPetBattle == nil then
     local critters = awful.critters.filter(function(critter)
         local count, total, units = awful.units.around(critter, 25, function(unit)
@@ -256,39 +255,41 @@ local function NavigateToNextBattle()
         awful.alert("Found next battle")
     end
 
-    if nextPetBattle and nextPetBattle.dead then
-        nextPetBattle = nil
-    elseif dist <= 10 then
-        awful.StopMoving()
-        local x, y, z = nextPetBattle.position()
-        MoveTo(x, y, z)
-        Dismount()
-        if awful.time < timeInteract then
-            return
-        end
-        timeInteract = awful.time + delayTimeInteract.now
-        nextPetBattle:interact()
-    elseif dist <= 25 then
-        local px, py, pz = player.position()
-        pz = awful.GroundZ(px, py, pz)
-        -- MoveTo(px, py, pz)
-        local path = awful.path(player, nextPetBattle)
-        path.draw()
-        path.follow()
-    elseif nextPetBattle and player.mounted then
-        local x, y, z = nextPetBattle.position()
-        if type(x) == "number" then
-            -- MoveTo(x, y, z)
+    if nextPetBattle then
+        local dist = awful.distance(nextPetBattle)
+        if nextPetBattle.dead then
+            nextPetBattle = nil
+        elseif dist <= 10 then
+            awful.StopMoving()
+            local x, y, z = nextPetBattle.position()
+            MoveTo(x, y, z)
+            Dismount()
+            if awful.time < timeInteract then
+                return
+            end
+            timeInteract = awful.time + delayTimeInteract.now
+            nextPetBattle:interact()
+        elseif dist <= 25 then
+            local px, py, pz = player.position()
+            pz = awful.GroundZ(px, py, pz)
+            -- MoveTo(px, py, pz)
             local path = awful.path(player, nextPetBattle)
-            -- path = path.simplify(1, 1)
             path.draw()
             path.follow()
+        elseif player.mounted then
+            local x, y, z = nextPetBattle.position()
+            if type(x) == "number" then
+                -- MoveTo(x, y, z)
+                local path = awful.path(player, nextPetBattle)
+                -- path = path.simplify(1, 1)
+                path.draw()
+                path.follow()
+            end
+            return
+            -- end
+        elseif not player.mounted then
+            C_MountJournal.SummonByID(0)
         end
-
-        return
-        -- end
-    elseif not player.mounted then
-        C_MountJournal.SummonByID(0)
     end
 end
 
@@ -338,7 +339,11 @@ awful.addUpdateCallback(function()
     if distanceToGround >= 20 then
         -- awful.alert("Too high")
         AscendStop()
-    elseif player.mounted and distanceToGround < 15 and distanceToBattle > 10 then
+    elseif nextPetBattle == nil and not player.flying and player.mounted then
+        awful.alert("Flying up")
+        JumpOrAscendStart()
+    elseif nextPetBattle and player.mounted and distanceToGround < 15 and distanceToBattle > 10 then
+        awful.alert("Flying up to pet")
         JumpOrAscendStart()
     end
     if not C_PetBattles.IsInBattle() then
