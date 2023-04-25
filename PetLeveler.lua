@@ -117,17 +117,25 @@ local function GetPetMaxHealthByIndex(index)
 end
 
 local function IsZandalariPetFromPetJournal(index)
-    local petID, _, _, _, level, _, _, name = C_PetJournal.GetPetInfoByIndex(index)
-    if string.find(name, "Zandalari") then
+    local petID, speciesID, _, _, level, _, _, name = C_PetJournal.GetPetInfoByIndex(index)
+    -- 1180: Zandalari Kneebiter
+    -- 1211: Zandalari Anklerender
+    -- 1212: Zandalari Footslasher
+    -- 1213: Zandalari Toenibbler
+    if speciesID == 1180 or speciesID == 1211 or speciesID == 1212 or speciesID == 1213 then
         return true
     end
     return false
 end
 
 local function IsZandalariPetFromPetTeam(index)
-    local petID = C_PetJournal.GetPetLoadOutInfo(index);
-    local name = select(8, C_PetJournal.GetPetInfoByPetID(petID))
-    if string.find(name, "Zandalari") then
+    local petGUID = C_PetJournal.GetPetLoadOutInfo(index);
+    local speciesID = select(1, C_PetJournal.GetPetInfoByPetID(petGUID))
+    -- 1180: Zandalari Kneebiter
+    -- 1211: Zandalari Anklerender
+    -- 1212: Zandalari Footslasher
+    -- 1213: Zandalari Toenibbler
+    if speciesID == 1180 or speciesID == 1211 or speciesID == 1212 or speciesID == 1213 then
         return true
     end
     return false
