@@ -475,7 +475,7 @@ awful.addUpdateCallback(function()
         --     return
         -- end
 
-        if settings.roundNumber > 0 then
+        if settings.roundNumber ~= nil and settings.roundNumber > 0 then
             nextPetBattle = nil
         end
         firstAttackLevelingPET = false
