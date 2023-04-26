@@ -256,10 +256,10 @@ end
 -- Events
 local function OnEvent(self, _, _, message)
     if message == ERR_PETBATTLE_NOT_HERE_OBSTRUCTED then
-        -- local x, y, z = nextPetBattle.position()
-        -- MoveTo(x, y, z)
-        -- nextPetBattle:interact()
-        error("figure out what to do")
+        local x, y, z = nextPetBattle.position()
+        MoveTo(x, y, z)
+        nextPetBattle:interact()
+        -- error("figure out what to do")
     end
 end
 
