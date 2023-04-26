@@ -517,7 +517,7 @@ local function SetNextBattle()
                 not awful.call('UnitIsBattlePetCompanion', critter.unit)
         else
             return count == 0 and not critter.dead and awful.call('UnitIsBattlePet', critter.unit) and
-                not awful.call('UnitIsBattlePetCompanion', critter.unit) and distanceToClosestPoint(critter)
+                not awful.call('UnitIsBattlePetCompanion', critter.unit) and distanceToClosestPoint(critter) <= 20
         end
     end)
     if #critters == 0 then
