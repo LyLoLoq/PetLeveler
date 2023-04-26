@@ -248,9 +248,10 @@ local points = { { x = -9.064600944519043, y = 1775.9498291015625, z = 241.83862
     { x = -110.78910064697266, y = 1621.232421875,     z = 235.51133728027344 },
     { x = -122.18473815917969, y = 1632.6727294921875, z = 236.15232849121094 },
     { x = -133.36117553710938, y = 1646.2099609375,    z = 235.63084411621094 },
-    { x= -79.77179718017578, y= 1694.59765625, z= 235.51535034179688 },
-    { x= -53.63924789428711, y= 1721.18310546875, z= 235.424072265625 },
-    { x= -30.32332992553711, y= 1700.79833984375, z= 236.16441345214844 }
+    { x = -94.61335754394531,  y = 1664.15673828125,   z = 235.61782836914063 },
+    { x = -79.77179718017578,  y = 1694.59765625,      z = 235.51535034179688 },
+    { x = -53.63924789428711,  y = 1721.18310546875,   z = 235.424072265625 },
+    { x = -30.32332992553711,  y = 1700.79833984375,   z = 236.16441345214844 }
 }
 
 if ExpertRiding.known then
@@ -306,6 +307,15 @@ end
 
 
 awful.immerseOL(points)
+
+
+
+-- awful.Draw(function(draw)
+--     for index, value in ipairs(points) do
+--         draw:Circle(value.x, value.y, value.z, 3)
+--         draw:Text(index, "GameFontNormal", value.x, value.y, value.z + 3)
+--     end
+-- end)
 
 
 local lastPoint = points[1]
@@ -586,24 +596,15 @@ C_Timer.After(3, function()
     end
 end)
 
--- awful.Draw(function(draw)
---     if not ExpertRiding.known then
---         points.draw()
---         for index, value in ipairs(points) do
---             -- draw:Line(x1, y1, z1, safePosition.x, safePosition.y, safePosition.z)
---             draw:FilledCircle(value.x, value.y, value.z, 50)
---         end
---     end
--- end)
 
 
-
--- local newPoints = {}
--- cmd:New(function(msg)
---     if string.lower(msg) == "add" then
---         local x, y, z = awful.player.position()
---         -- local obj = { x, y, z }
---         table.insert(newPoints, { x = x, y = y, z = z })
---         Unlocker.Util.File:Write("scripts/awful/routines/PetLeveler/paths.json", Unlocker.Util.JSON:Encode(newPoints), false)
---     end
--- end)
+local newPoints = {}
+cmd:New(function(msg)
+    if string.lower(msg) == "add" then
+        local x, y, z = awful.player.position()
+        -- local obj = { x, y, z }
+        table.insert(newPoints, { x = x, y = y, z = z })
+        Unlocker.Util.File:Write("scripts/awful/routines/PetLeveler/paths.json", Unlocker.Util.JSON:Encode(newPoints),
+        false)
+    end
+end)
