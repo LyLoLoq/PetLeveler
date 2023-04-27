@@ -1,9 +1,7 @@
 {
   "load": [
-    "petbot",
-    {
-      "root": "petbot/",
-      "files": ["GroundPath", "FlightPath", "PetLeveler"]
-    }
+    "GroundPath",
+    "FlightPath",
+    "PetLeveler"
   ]
 }
