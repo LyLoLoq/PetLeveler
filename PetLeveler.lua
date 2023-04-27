@@ -17,7 +17,7 @@ local JumpOrAscendStart = JumpOrAscendStart
 
 -- Welcome messages and stuff
 C_Timer.After(3, function()
-    awful.print("PetLeveler loaded")
+    awful.print("PetLeveler loaded, something is not working? Join discord and let me know")
     awful.print("/pets to open menu")
 end)
 
