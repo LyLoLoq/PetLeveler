@@ -91,15 +91,15 @@ end
 
 
 -- Commands
-local newPoints = {}
+local newPoints = Unlocker.Util.JSON:Decode(Unlocker.Util.File:Read("scripts/awful/routines/PetLeveler/paths.json"))
 awful.immerseOL(newPoints)
 cmd:New(function(msg)
     if string.lower(msg) == "add" then
         local x, y, z = awful.player.position()
         -- local obj = { x, y, z }
-        table.insert(newPoints, { x = x, y = y, z = z })
+        table.insert(newPoints, { x = x, y = y, z = z, radius = 5 })
         Unlocker.Util.File:Write("scripts/awful/routines/PetLeveler/paths.json", Unlocker.Util.JSON:Encode(newPoints), false)
-    elseif string.lower(msg) == "debugg" then
+    elseif string.lower(msg) == "pegadinha" then
         settings.debugPets = not settings.debugPets
         if settings.debugPets then
             debugFrame:Show()
@@ -118,7 +118,7 @@ if not ExpertRiding.known then
 end
 
 awful.Draw(function(draw)
-    newPoints:draw()
+    -- newPoints:draw()
     if settings.debugPets then
         for index, value in ipairs(points) do
             draw:Circle(value.x, value.y, value.z, 2)
@@ -126,6 +126,11 @@ awful.Draw(function(draw)
             draw:Text(index, font, value.x, value.y, value.z + 5)
         end
     end
+    -- for index, value in ipairs(newPoints) do
+    --     draw:Circle(value.x, value.y, value.z, 2)
+    --     local font = awful.createFont(10)
+    --     draw:Text(index, font, value.x, value.y, value.z + 5)
+    -- end
 end)
 
 -- Global vars
@@ -364,7 +369,7 @@ local function Unstuck()
 end
 
 local function NavigateRoute()
-    if player.moving then
+    if player.moving and not player.flying then
         return false
     end
     for index, value in ipairs(points) do
@@ -439,6 +444,7 @@ local function SetNextBattle()
             return a and b and a.distance < b.distance
         end)
         nextPetBattle = critters[1]
+        nextPetBattle.setTarget()
         awful.alert("Found next battle")
     end
 end
@@ -457,38 +463,8 @@ local function NavigateToNextBattle()
             end
             timeInteract = awful.time + delayTimeInteract.now
             nextPetBattle:interact()
-            -- elseif dist <= 25 then
-            --     local px, py, pz = player.position()
-            --     pz = awful.GroundZ(px, py, pz)
-            --     local path = awful.path(player, nextPetBattle)
-            --     path.draw()
-            --     path.follow()
-            -- elseif player.mounted then
-            --     local x, y, z = nextPetBattle.position()
-            --     if type(x) == "number" then
-            --         local path = awful.path(player, nextPetBattle)
-            --         path.draw()
-            --         path.follow()
-            --     end
-            --     return
         end
     end
-    -- local px, py, pz = player.position()
-    -- if player.flying then
-    --     local gx, gy, gz = awful.GroundZ(px, py, pz)
-    --     local distanceToGround = awful.distance(px, py, pz, gx, gy, gz)
-    --     if distanceToGround >= 20 then
-    --         AscendStop()
-    --     elseif nextPetBattle == nil then
-    --         JumpOrAscendStart()
-    --     elseif distanceToGround < 15 then
-    --         local distanceToBattle = awful.distance(nextPetBattle)
-    --         if distanceToBattle > 10 then
-    --             awful.alert("Flying up to pet")
-    --             JumpOrAscendStart()
-    --         end
-    --     end
-    -- end
 end
 
 local function ChangePet()
@@ -590,19 +566,6 @@ awful.onTick(function()
         Battle()
     else
         SetNextBattle()
-        -- if not player.mounted then
-        --     if nextPetBattle then
-        --         local distanceToBattle = awful.distance(nextPetBattle)
-        --         if distanceToBattle > 15 then
-        --             C_MountJournal.SummonByID(0)
-        --         end
-        --     else
-        --         C_MountJournal.SummonByID(0)
-        --     end
-        --     return
-        -- elseif ExpertRiding.known and not player.flying then
-        --     JumpOrAscendStart()
-        -- end
         firstAttackLevelingPET = false
         settings.roundNumber = 0
         UseHeal()
