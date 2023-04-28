@@ -91,23 +91,23 @@ end
 
 
 -- Commands
-local newPoints = Unlocker.Util.JSON:Decode(Unlocker.Util.File:Read("scripts/awful/routines/PetLeveler/paths.json"))
-awful.immerseOL(newPoints)
-cmd:New(function(msg)
-    if string.lower(msg) == "add" then
-        local x, y, z = awful.player.position()
-        -- local obj = { x, y, z }
-        table.insert(newPoints, { x = x, y = y, z = z, radius = 5 })
-        Unlocker.Util.File:Write("scripts/awful/routines/PetLeveler/paths.json", Unlocker.Util.JSON:Encode(newPoints), false)
-    elseif string.lower(msg) == "pegadinha" then
-        settings.debugPets = not settings.debugPets
-        if settings.debugPets then
-            debugFrame:Show()
-        else
-            debugFrame:Hide()
-        end
-    end
-end)
+-- local newPoints = Unlocker.Util.JSON:Decode(Unlocker.Util.File:Read("scripts/awful/routines/PetLeveler/paths.json"))
+-- awful.immerseOL(newPoints)
+-- cmd:New(function(msg)
+--     if string.lower(msg) == "add" then
+--         local x, y, z = awful.player.position()
+--         -- local obj = { x, y, z }
+--         table.insert(newPoints, { x = x, y = y, z = z, radius = 5 })
+--         Unlocker.Util.File:Write("scripts/awful/routines/PetLeveler/paths.json", Unlocker.Util.JSON:Encode(newPoints), false)
+--     elseif string.lower(msg) == "pegadinha" then
+--         settings.debugPets = not settings.debugPets
+--         if settings.debugPets then
+--             debugFrame:Show()
+--         else
+--             debugFrame:Hide()
+--         end
+--     end
+-- end)
 
 
 local ExpertRiding = awful.NewSpell(34090)
