@@ -60,10 +60,8 @@ statusFrame:Button({
     var = "enabled",
     onClick = function()
         if settings.enabled then
-            awful.AntiAFK:Enable()
             awful.print("Pet leveling enabled at: " .. date())
         else
-            awful.AntiAFK:Disable()
             awful.print("Pet leveling Disabled at: " .. date())
         end
     end,
@@ -114,7 +112,10 @@ local ExpertRiding = awful.NewSpell(34090)
 
 local points = pets.flyingPoints
 if not ExpertRiding.known then
-    points = pets.groundPoints
+    awful.alert("It seems you can't fly, will use only ground path")
+    points = pets.groundPoint
+else
+    awful.alert("We can fly, will use flying path")
 end
 
 awful.Draw(function(draw)
@@ -167,6 +168,7 @@ local function OnEvent(self, _, _, message)
         MoveTo(x, y, z)
         nextPetBattle:interact()
         -- error("figure out what to do")
+        awful.alert("Obstructed path to pet, moving towards the pet")
     end
 end
 
@@ -198,6 +200,10 @@ local function playerTimeStandingStill()
     end
 end
 local function IsAbilityUsable(index)
+    if type(index) ~= "number" then
+        error("Number expected but received: " .. type(index))
+    end
+
     local isUsable = C_PetBattles.GetAbilityState(Enum.BattlePetOwner.Ally, C_PetBattles.GetActivePet(Enum.BattlePetOwner.Ally), index);
     return isUsable
 end
@@ -212,6 +218,9 @@ local function IsAllActionsDisabled()
 end
 
 local function GetPetHealthByIndex(index)
+    if type(index) ~= "number" then
+        error("Number expected but received: " .. type(index))
+    end
     if not C_PetBattles.IsInBattle() then
         local petID, ability1ID, ability2ID, ability3ID, locked = C_PetJournal.GetPetLoadOutInfo(index);
         local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID);
@@ -222,12 +231,18 @@ local function GetPetHealthByIndex(index)
 end
 
 local function GetPetMaxHealthByIndex(index)
+    if type(index) ~= "number" then
+        error("Number expected but received: " .. type(index))
+    end
     local petID, ability1ID, ability2ID, ability3ID, locked = C_PetJournal.GetPetLoadOutInfo(index);
     local health, maxHealth, attack, speed, rarity = C_PetJournal.GetPetStats(petID);
     return maxHealth
 end
 
 local function IsZandalariPetFromPetJournal(index)
+    if type(index) ~= "number" then
+        error("Number expected but received: " .. type(index))
+    end
     local petID, speciesID, _, _, level, _, _, name = C_PetJournal.GetPetInfoByIndex(index)
     -- 1180: Zandalari Kneebiter
     -- 1211: Zandalari Anklerender
@@ -240,6 +255,9 @@ local function IsZandalariPetFromPetJournal(index)
 end
 
 local function IsZandalariPetFromPetTeam(index)
+    if type(index) ~= "number" then
+        error("Number expected but received: " .. type(index))
+    end
     local petGUID = C_PetJournal.GetPetLoadOutInfo(index);
     local speciesID = select(1, C_PetJournal.GetPetInfoByPetID(petGUID))
     -- 1180: Zandalari Kneebiter
@@ -295,6 +313,9 @@ local function SetBattleTeam()
 end
 
 local function Travel(path)
+    if type(path) ~= "table" then
+        error("Table expected but received: " .. type(path))
+    end
     if #path < 1 then
         return
     end
@@ -320,6 +341,15 @@ local function Travel(path)
 end
 
 local function Navigate(x, y, z)
+    if type(x) ~= "number" then
+        error("Number expected but received: " .. type(x))
+    end
+    if type(y) ~= "number" then
+        error("Number expected but received: " .. type(y))
+    end
+    if type(z) ~= "number" then
+        error("Number expected but received: " .. type(z))
+    end
     local px, py, pz = player.position()
     local gx, gy, gz = awful.GroundZ(px, py, pz)
     local distanceToGround = awful.distance(px, py, pz, gx, gy, gz)
@@ -578,6 +608,23 @@ awful.onTick(function()
         if not shouldNavigateToReset then
             NavigateToNextBattle()
             NavigateRoute()
+        end
+    end
+end)
+
+
+
+-- AntiAFK
+local time, delay = 0, awful.delay(30, 60)
+awful.onTick(function()
+    if awful.time > time then
+        time = awful.time + delay.now
+        if ResetAfk then
+            ResetAfk()
+        elseif SetLastHardwareActionTime then
+            SetLastHardwareActionTime(awful.time*1000)
+        elseif LastHardwareAction then
+            LastHardwareAction(awful.time * 1000)
         end
     end
 end)
