@@ -359,9 +359,11 @@ local function Navigate(x, y, z)
             C_MountJournal.SummonByID(0)
         elseif ExpertRiding.known and not player.flying then
             if distanceToGround >= 20 then
-                AscendStop()
+                -- AscendStop()
+                awful.call("AscendStop")
             else
-                JumpOrAscendStart()
+                awful.call("JumpOrAscendStart")
+                -- JumpOrAscendStart()
             end
             Travel(path)
         else
@@ -482,8 +484,6 @@ end
 local timeInteract, delayTimeInteract = 0, awful.delay(1, 3)
 local function NavigateToNextBattle()
     if nextPetBattle then
-        local x, y, z = nextPetBattle.position()
-        Navigate(x, y, z)
         local dist = awful.distance(nextPetBattle)
         if dist <= 10 then
             awful.StopMoving()
@@ -493,6 +493,9 @@ local function NavigateToNextBattle()
             end
             timeInteract = awful.time + delayTimeInteract.now
             nextPetBattle:interact()
+        else
+            local x, y, z = nextPetBattle.position()
+            Navigate(x, y, z)
         end
     end
 end
