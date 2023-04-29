@@ -19,6 +19,7 @@ local JumpOrAscendStart = JumpOrAscendStart
 C_Timer.After(3, function()
     awful.print("PetLeveler loaded, something is not working? Join discord and let me know")
     awful.print("/pets to open menu")
+    awful.print("Important: Make sure you don't have a filter active on your Pet Journal")
 end)
 
 -- UI
