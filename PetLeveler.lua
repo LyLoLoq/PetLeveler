@@ -1,3 +1,4 @@
+---@type unknown, unknown, Pets
 local Unlocker, awful, pets = ...
 
 -----------------
@@ -402,7 +403,7 @@ local function Unstuck()
 end
 
 local function NavigateRoute()
-    if player.moving and not player.flying then
+    if player.moving then
         return false
     end
     for index, value in ipairs(points) do

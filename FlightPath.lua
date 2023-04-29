@@ -1,5 +1,8 @@
+---@type unknown, unknown, Pets
 local Unlocker, awful, pets = ...
 
+---@class Pets
+---@field flyingPoints table
 pets.flyingPoints = {
     { x = -131.83180236816406, y = 1709.742919921875,  z = 244.20372009277344 },
     { x = -105.58808898925781, y = 1730.44970703125,   z = 243.38377380371094 },
