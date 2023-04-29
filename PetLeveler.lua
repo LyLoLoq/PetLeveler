@@ -114,7 +114,7 @@ local ExpertRiding = awful.NewSpell(34090)
 local points = pets.flyingPoints
 if not ExpertRiding.known then
     awful.alert("It seems you can't fly, will use only ground path")
-    points = pets.groundPoint
+    points = pets.groundPoints
 else
     awful.alert("We can fly, will use flying path")
 end
