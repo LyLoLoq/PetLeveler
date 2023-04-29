@@ -403,7 +403,7 @@ local function Unstuck()
 end
 
 local function NavigateRoute()
-    if player.moving then
+    if player.moving and not player.flying then
         return false
     end
     for index, value in ipairs(points) do
